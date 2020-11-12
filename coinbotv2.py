@@ -19,8 +19,6 @@ CoinMarketCap: Other Crypto price
 CryptoHistory: Crypto Charts
 IEXPrice: Stock ticker price
 StockCharts: Stock Charts
-Google news rss feed: News
-PredictIt: Political Market
 '''
 description = '''Discord bot for fetching Crypto and Stock Prices in discord'''
 bot = commands.Bot(command_prefix='[!,$]', description=description)
@@ -45,31 +43,7 @@ async def on_message(message):
         Help.add_field(name="$STOCK_TICKER", value="Gets the latest stock price")
         Help.add_field(name = "\u200B", value = "\u200B")
         Help.add_field(name = "\u200B", value = "\u200B")
-        Help.add_field(name="!prez, !dprez, !rprez", value="PredictIt Market info for presidential candidate")
-        Help.add_field(name = "\u200B", value = "\u200B")
-        Help.add_field(name = "\u200B", value = "\u200B")
-        Help.add_field(name="!news", value="Crypto News")
         await message.channel.send(embed=Help)
-    elif message.content.lower().startswith('!prez'):
-        await message.channel.trigger_typing()
-        n, name, nCost, nPer = prez('p')
-        table = zip(name, nCost, nPer)
-        t = (tabulate(table, tablefmt='orgtbl', floatfmt=".2f"))
-        t = '```'+n+'\n'+ t + '```'
-        await message.channel.send(t)
-     #Returns most recent news from google.
-    ##2 of the most recent news articles  
-    elif message.content.lower().startswith('!news'):
-        await message.channel.trigger_typing()
-        crypto = feedparser.parse("https://news.google.com/news/rss/search/section/q/cryptocurrency/cryptocurrency?hl=en&gl=US&ned=us/.rss")
-        cryptoLinks = []
-        for post in crypto.entries:
-            cryptoLinks.append(post.link)
-        await message.channel.send(str(cryptoLinks[0] + '\n' + cryptoLinks[1]))
-    elif re.match("(^![a-zA-Z]{2}$)", message.content) != None:
-        await message.channel.trigger_typing()
-        t = str(message.content[1:].split()[0]).lower()
-        await message.channel.send(embed=COVID(t))
         #function call here
     elif message.content.startswith("!"):
         await message.channel.trigger_typing()
@@ -176,47 +150,5 @@ def IEXPrice(t):
         price = -1
         return price, price, price
     return company, round(float(cost),2), round((float(per)*100),2)
-#PredictIt
-#Presidential Info
-def prez(ticker):
-    all_markets_url = "https://www.predictit.org/api/marketdata/all/"
-    ticker = 12
-    name = []
-    nCost = []
-    nPer = []
-    r = requests.get(all_markets_url)
-    r.close()
-    markets = json.loads(r.content)["markets"]
-    i = 0
-    for market in (markets[ticker]['contracts']):
-        name.append(market['name'])
-        nCost.append(format(float(market['lastTradePrice']), '.2f'))
-        l = (((market['lastTradePrice']/market['lastClosePrice'])-1)*100)
-        nPer.append("{:02.2f}".format(l) + "%")
-        i+=1
-        if(i == 5):
-            break
-    return markets[ticker]['name'], name, nCost, nPer
-
-#COVID CASES
-def COVID(state):
-    c = discord.Colour(0x040000)
-    states = {"AL":"Alabama","AK":"Alaska","AZ":"Arizona","AR":"Arkansas","CA":"California","CO":"Colorado","CT":"Connecticut","DE":"Delaware","FL":"Florida","GA":"Georgia","HI":"Hawaii","ID":"Idaho","IL":"Illinois","IN":"Indiana","IA":"Iowa","KS":"Kansas","KY":"Kentucky","LA":"Louisiana","ME":"Maine","MD":"Maryland","MA":"Massachusetts","MI":"Michigan","MN":"Minnesota","MS":"Mississippi","MO":"Missouri","MT":"Montana","NE":"Nebraska","NV":"Nevada","NH":"New Hampshire","NJ":"New Jersey","NM":"New Mexico","NY":"New York","NC":"North Carolina","ND":"North Dakota","OH":"Ohio","OK":"Oklahoma","OR":"Oregon","PA":"Pennsylvania","RI":"Rhode Island","SC":"South Carolina","SD":"South Dakota","TN":"Tennessee","TX":"Texas","UT":"Utah","VT":"Vermont","VA":"Virginia","WA":"Washington","WV":"West Virginia","WI":"Wisconsin","WY":"Wyoming", "GU":"Guam", "PR":"Puerto Rico", "VI":"Virgin Islands"}
-    if(state == 'us'):
-        stats = requests.get('https://covidtracking.com/api/v1/'+ state  +'/current.json')
-        stats0 = stats.json()[0]
-        rate = discord.Embed(title="USA COVID Info", description=str(stats0['dateChecked']), color = (c) )
-    else:
-        stats = requests.get('https://covidtracking.com/api/v1/states/'+ state  +'/current.json')
-        stats0 = stats.json()
-        rate = discord.Embed(title=str(states[state.upper()])+ " COVID Data", description=str(stats0['lastUpdateEt']), color = (c) )
-    rate.add_field(name="Daily Cases", value=str(stats0['positiveIncrease']), inline= True)
-    rate.add_field(name="Daily Deaths", value=str(stats0['deathIncrease']), inline= True)
-    rate.add_field(name = "\u200B", value = "\u200B")
-    rate.add_field(name="Total Cases", value=str(stats0['positive']), inline=True)
-    rate.add_field(name="Total Deaths", value=str(stats0['death']), inline=True)
-    rate.add_field(name = "\u200B", value = "\u200B")
-    return rate
-
 
 bot.run(KEY)
