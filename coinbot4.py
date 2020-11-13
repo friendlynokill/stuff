@@ -92,7 +92,7 @@ async def on_message(message):
         
     elif message.content.startswith("$news"):
         await message.channel.trigger_typing()
-        t = str(message.content[1:].split()[0])
+        t = str(message.content[6:].split()[0])
         company, cost, per = IEXPrice(t.upper())
         #If ticker is not found
         if(cost == -1):
