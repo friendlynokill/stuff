@@ -36,11 +36,6 @@ async def on_ready():
     activity = discord.Game(name="!help for commands", type = 3)
     await bot.change_presence(status=discord.Status.online, activity=activity)
     
-@bot.command()
-async def add(ctx, left: int, right: int):
-    """Adds two numbers together."""
-    await ctx.send(left + right)
-    
 @bot.event
 async def on_message(message):
     if message.content.lower().startswith(('!help')):
@@ -62,7 +57,8 @@ async def on_message(message):
         cryptoLinks = []
         for post in crypto.entries:
             cryptoLinks.append(post.link)
-        await message.channel.send(str(cryptoLinks[0] + '\n' + cryptoLinks[1]))
+        await message.channel.send(str(cryptoLinks[0]))
+        await message.channel.send(str(cryptoLinks[1]))
     elif re.match("(^![a-zA-Z]{2}$)", message.content) != None:
         await message.channel.trigger_typing()
         t = str(message.content[1:].split()[0]).lower()
