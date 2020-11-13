@@ -39,29 +39,19 @@ async def on_message(message):
     if message.content.lower().startswith(('!help')):
         await message.channel.trigger_typing()
         Help = discord.Embed(title="Help Menu", description="Commands")
-        Help.add_field(name="!COIN_TICKER", value="Gets the latest cryptocurrency price")
+        Help.add_field(name="!COIN_TICKER", value="Gets the latest cryptocurrency quotes")
         Help.add_field(name = "\u200B", value = "\u200B")
         Help.add_field(name = "\u200B", value = "\u200B")
-        Help.add_field(name="$STOCK_TICKER", value="Gets the latest stock price")
+        Help.add_field(name="$STOCK_TICKER", value="Gets the latest stock quotes")
         Help.add_field(name = "\u200B", value = "\u200B")
         Help.add_field(name = "\u200B", value = "\u200B")
-        Help.add_field(name="!prez, !dprez, !rprez", value="PredictIt Market info for presidential candidate")
-        Help.add_field(name = "\u200B", value = "\u200B")
-        Help.add_field(name = "\u200B", value = "\u200B")
-        Help.add_field(name="!news", value="Crypto News")
+        Help.add_field(name="!news", value="Stock Market News")
         await message.channel.send(embed=Help)
-    elif message.content.lower().startswith('!prez'):
-        await message.channel.trigger_typing()
-        n, name, nCost, nPer = prez('p')
-        table = zip(name, nCost, nPer)
-        t = (tabulate(table, tablefmt='orgtbl', floatfmt=".2f"))
-        t = '```'+n+'\n'+ t + '```'
-        await message.channel.send(t)
      #Returns most recent news from google.
     ##2 of the most recent news articles  
     elif message.content.lower().startswith('!news'):
         await message.channel.trigger_typing()
-        crypto = feedparser.parse("https://news.google.com/news/rss/search/section/q/cryptocurrency/cryptocurrency?hl=en&gl=US&ned=us/.rss")
+        crypto = feedparser.parse("https://news.google.com/rss/search?hl=en-US&gl=US&q=stocks&ceid=US:en")
         cryptoLinks = []
         for post in crypto.entries:
             cryptoLinks.append(post.link)
@@ -176,27 +166,6 @@ def IEXPrice(t):
         price = -1
         return price, price, price
     return company, round(float(cost),2), round((float(per)*100),2)
-#PredictIt
-#Presidential Info
-def prez(ticker):
-    all_markets_url = "https://www.predictit.org/api/marketdata/all/"
-    ticker = 12
-    name = []
-    nCost = []
-    nPer = []
-    r = requests.get(all_markets_url)
-    r.close()
-    markets = json.loads(r.content)["markets"]
-    i = 0
-    for market in (markets[ticker]['contracts']):
-        name.append(market['name'])
-        nCost.append(format(float(market['lastTradePrice']), '.2f'))
-        l = (((market['lastTradePrice']/market['lastClosePrice'])-1)*100)
-        nPer.append("{:02.2f}".format(l) + "%")
-        i+=1
-        if(i == 5):
-            break
-    return markets[ticker]['name'], name, nCost, nPer
 
 #COVID CASES
 def COVID(state):
