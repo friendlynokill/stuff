@@ -39,11 +39,7 @@ async def on_ready():
     activity = discord.Game(name="!help for commands", type = 3)
     await bot.change_presence(status=discord.Status.online, activity=activity)
     print(f'{bot.user.name} has logged in!')
-   
-@bot.event 
-async def on_disconnect():
-    #Runsif the bot disconnects"""
-    print(f'{bot.user.name} has disconnected!')
+    await message.channel.send(bot.user.name ' has logged in!')
     
 @bot.event
 async def on_message(message):
