@@ -10,7 +10,6 @@ from password import KEY, IEX_TOKEN, CMK_TOKEN
 from tabulate import tabulate
 from discord.ext import commands
 import json
-import random
 
 #This is used for discord.py >= V1.0; python 3.5+;
 
@@ -51,14 +50,6 @@ async def on_message(message):
         await message.channel.send(embed=Help)
      #Returns most recent news from google.
     ##2 of the most recent news articles  
-    elif message.content.lower().startswith('!news'):
-        await message.channel.trigger_typing()
-        crypto = feedparser.parse("https://news.google.com/rss/search?hl=en-US&gl=US&q=stock%20market%20live%20updates&ceid=US:en")
-        cryptoLinks = []
-        for post in crypto.entries:
-            cryptoLinks.append(post.link)
-        await message.channel.send(str(cryptoLinks[0]))
-        await message.channel.send(str(cryptoLinks[1]))
     elif re.match("(^![a-zA-Z]{2}$)", message.content) != None:
         await message.channel.trigger_typing()
         t = str(message.content[1:].split()[0]).lower()
@@ -90,7 +81,30 @@ async def on_message(message):
             embedCoin = discord.Embed(title=coin, description=t.upper() + ": $" + cost + " " + per + "% ", color = (c) )
             embedCoin.set_image(url = chart)
             await message.channel.send(embed=embedCoin)
-
+  
+     elif message.content.lower().startswith('$market news'):
+        await message.channel.trigger_typing()
+        crypto = feedparser.parse("https://news.google.com/rss/search?hl=en-US&gl=US&q=stock%20market%20live%20updates&ceid=US:en")
+        cryptoLinks = []
+        for post in crypto.entries:
+            cryptoLinks.append(post.link)
+        await message.channel.send(str(cryptoLinks[0]))
+        await message.channel.send(str(cryptoLinks[1]))
+        
+    elif message.content.startswith("$news"):
+        await message.channel.trigger_typing()
+        t = str(message.content[1:].split()[0])
+        company, cost, per = IEXPrice(t.upper())
+        #If ticker is not found
+        if(cost == -1):
+            await message.channel.send('```Ticker Not Found```')
+        search_url = str("https://news.google.com/rss/search?hl=en-US&gl=US&q=" + company + "%20live%20updates&ceid=US:en") 
+        cryptoLinks = []
+        for post in crypto.entries:
+            cryptoLinks.append(post.link)
+        await message.channel.send(str(cryptoLinks[0]))
+        await message.channel.send(str(cryptoLinks[1]))
+   
     elif message.content.startswith("$"):
         await message.channel.trigger_typing()
         t = str(message.content[1:].split()[0])
