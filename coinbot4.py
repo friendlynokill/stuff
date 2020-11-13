@@ -94,10 +94,11 @@ async def on_message(message):
         await message.channel.trigger_typing()
         t = str(message.content[6:].split()[0])
         company, cost, per = IEXPrice(t.upper())
+        company_first_word = company.split()[0]
         #If ticker is not found
         if(cost == -1):
             await message.channel.send('```Ticker Not Found```')
-        search_url = str("https://news.google.com/rss/search?hl=en-US&gl=US&q=" + str(company) + "%20live%20updates&ceid=US:en") 
+        search_url = str("https://news.google.com/rss/search?hl=en-US&gl=US&q=" + str(company_first_word) + "%20live%20updates&ceid=US:en") 
         print(search_url)
         crypto = feedparser.parse(search_url) 
         
