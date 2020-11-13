@@ -81,8 +81,7 @@ async def on_message(message):
             embedCoin = discord.Embed(title=coin, description=t.upper() + ": $" + cost + " " + per + "% ", color = (c) )
             embedCoin.set_image(url = chart)
             await message.channel.send(embed=embedCoin)
-  
-     elif message.content.lower().startswith('$market news'):
+    elif message.content.lower().startswith('$market news'):
         await message.channel.trigger_typing()
         crypto = feedparser.parse("https://news.google.com/rss/search?hl=en-US&gl=US&q=stock%20market%20live%20updates&ceid=US:en")
         cryptoLinks = []
