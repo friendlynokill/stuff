@@ -53,7 +53,7 @@ async def on_message(message):
     ##2 of the most recent news articles  
     elif message.content.lower().startswith('!news'):
         await message.channel.trigger_typing()
-        crypto = feedparser.parse("https://news.google.com/rss/search?hl=en-US&gl=US&q=stocks&ceid=US:en")
+        crypto = feedparser.parse("https://news.google.com/rss/search?hl=en-US&gl=US&q=stock%20market&ceid=US:en")
         cryptoLinks = []
         for post in crypto.entries:
             cryptoLinks.append(post.link)
