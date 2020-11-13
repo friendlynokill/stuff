@@ -10,8 +10,7 @@ from password import KEY, IEX_TOKEN, CMK_TOKEN
 from tabulate import tabulate
 from discord.ext import commands
 import json
-from discord.ext import commands
-
+import random
 
 #This is used for discord.py >= V1.0; python 3.5+;
 
@@ -33,13 +32,11 @@ portfolio = {}
 async def on_ready():
     print('Logged in as')
     print(bot.user.name)
-    print(bot.user.id)
     print('------')
     
     activity = discord.Game(name="!help for commands", type = 3)
     await bot.change_presence(status=discord.Status.online, activity=activity)
-    print(f'{bot.user.name} has logged in!')
-    await message.channel.send(bot.user.name, ' has logged in!')
+    await ctx.send(bot.user.name, "has logged in!")
     
 @bot.event
 async def on_message(message):
