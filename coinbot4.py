@@ -36,9 +36,10 @@ async def on_ready():
     activity = discord.Game(name="!help for commands", type = 3)
     await bot.change_presence(status=discord.Status.online, activity=activity)
     
-@bot.event
-async def add(ctx):
-    await ctx.send(bot.user.name, "has logged in!")
+@bot.command()
+async def add(ctx, left: int, right: int):
+    """Adds two numbers together."""
+    await ctx.send(left + right)
     
 @bot.event
 async def on_message(message):
