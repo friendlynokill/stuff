@@ -99,7 +99,6 @@ async def on_message(message):
         if(cost == -1):
             await message.channel.send('```Ticker Not Found```')
         search_url = str("https://news.google.com/rss/search?hl=en-US&gl=US&q=" + str(company_first_word) + "%20stock%20news&ceid=US:en") 
-        print(search_url)
         crypto = feedparser.parse(search_url) 
         
         cryptoLinks = []
