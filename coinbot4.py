@@ -33,9 +33,11 @@ async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print('------')
-    
-    activity = discord.Game(name="!help for commands", type = 3)
     await bot.change_presence(status=discord.Status.online, activity=activity)
+    activity = discord.Game(name="!help for commands", type = 3)
+    
+@bot.event
+async def add(ctx):
     await ctx.send(bot.user.name, "has logged in!")
     
 @bot.event
